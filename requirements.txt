@@ -1,0 +1,9 @@
+langchain
+langgraph
+langchain-community
+langchain-groq
+pinecone
+sentence-transformers
+pandas
+openpyxl
+python-dotenv
