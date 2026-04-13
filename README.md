@@ -12,7 +12,7 @@ An AI-powered system that uses RAG (Retrieval-Augmented Generation) and rule-bas
   - Call outcome lookup
   - Sentiment summary
 - 📦 Vector database: Pinecone
-- ⚡ Smart multi-level retrieval strategy
+- ⚡ Smart multi-level retrieval strategy (Exact + Fuzzy + Semantic)
 - 🖥️ CLI-based interaction
 
 ---
@@ -21,16 +21,18 @@ An AI-powered system that uses RAG (Retrieval-Augmented Generation) and rule-bas
 
 ## 🔄 System Flow
 
-User Query  
-   ↓  
-Call ID Detection (Regex)  
-   ↓  
-   ├── Tool Routing (Outcome / Sentiment)  
-   └── Retrieval System (RAG)  
-            ↓  
-        Context Generation  
-            ↓  
+```
+User Query
+   ↓
+Call ID Detection (Regex)
+   ↓
+   ├── Tool Routing (Outcome / Sentiment)
+   └── Retrieval System (RAG)
+            ↓
+        Context Generation
+            ↓
         LLM Response (Groq)
+```
 
 ---
 
@@ -43,10 +45,9 @@ INTERNSHIP_ASSIGNMENT/
 │── rag.py
 │── embed.py
 │── tools.py
-│── data.xlsx
+│── Call_Dataset.xlsx
 │── .env
 │── requirements.txt
-│── assets/ (optional)
 ```
 
 ---
@@ -116,12 +117,10 @@ python main.py
 
 # 💬 Example Queries
 
-```
-What happened in CALL_001?
-What is the sentiment of CALL_002?
-What is the outcome of CALL_003?
-Summarize customer complaints about delivery delays
-```
+- What happened in CALL_001?
+- What is the sentiment of CALL_002?
+- What is the outcome of CALL_003?
+- Summarize customer complaints about delivery delays
 
 ---
 
@@ -139,14 +138,13 @@ Negative – delayed delivery
 What happened in CALL_003?
 
 **Answer:**
-Customer contacted support for product information. The agent provided the details. No escalation required.
+Customer contacted support for product information. The agent provided details. No escalation required.
 
 ---
 
 # 🧩 Core Components
 
 ## 1. Data Processing (rag.py)
-
 - Loads call data from Excel
 - Combines:
   - Customer complaint
@@ -156,7 +154,6 @@ Customer contacted support for product information. The agent provided the detai
 ---
 
 ## 2. Vector Store (embed.py)
-
 - Uses `sentence-transformers/all-MiniLM-L6-v2`
 - Stores embeddings in Pinecone
 - Auto-creates index if not present
@@ -167,7 +164,7 @@ Customer contacted support for product information. The agent provided the detai
 
 ### ✅ Level 1: Exact Match
 - Detects CALL_ID using regex
-- Uses metadata filtering (`call_id`)
+- Uses metadata filtering
 - Highest precision
 
 ### ✅ Level 2: Fuzzy Search
@@ -176,10 +173,10 @@ Handles:
 - "call_001"
 - "CALL001"
 
-Improves recall
+Improves recall for noisy inputs
 
 ### ✅ Level 3: Semantic Search
-- General embedding-based retrieval
+- Embedding-based retrieval
 - Returns top-2 relevant calls
 
 ---
@@ -189,14 +186,14 @@ Improves recall
 - `get_call_outcome(call_id)`
 - `get_sentiment_summary(call_id)`
 
-Triggered using rule-based routing.
+Triggered using rule-based routing inside the agent.
 
 ---
 
 ## 5. Agent (agent.py)
 
 - Detects CALL_ID using regex
-- Routes query:
+- Routes queries:
   - Tool-based (outcome / sentiment)
   - RAG-based (general queries)
 - Uses Groq LLM for final response
@@ -206,10 +203,16 @@ Triggered using rule-based routing.
 
 ## 6. Main Application (main.py)
 
-- Loads dataset
+- Loads dataset from `Call_Dataset.xlsx`
 - Populates tool memory (`CALL_OUTCOMES`)
-- Ingests data into vector store
+- Ingests data into Pinecone vector store
 - Runs interactive CLI
+
+👉 **Important:**  
+If needed, update dataset path inside `main.py`:
+```python
+load_data("Call_Dataset.xlsx")
+```
 
 ---
 
@@ -221,14 +224,24 @@ Triggered using rule-based routing.
 
 ---
 
-# ✨ Notes
+# ⚡ Performance Improvements
 
-- First run may take time due to embedding generation
-- Ensure `.env` file is properly configured
-- Works fully in CLI (no frontend required)
+- Multi-level retrieval (Exact + Fuzzy + Semantic)
+- Metadata filtering for fast lookup
+- Embedding-based deduplication in Pinecone
+- Rule-based tool routing reduces LLM load
 
 ---
 
-# 🚀 Author
+# 🚀 Possible Future Improvements
+
+- Replace rule-based routing with full tool-calling (LangChain Agents)
+- Add SQL database for structured analytics (faster filtering of outcomes & sentiment)
+- Add FastAPI backend for production deployment
+- Add evaluation metrics (retrieval accuracy + response grounding score)
+
+---
+
+# ✨ Author
 
 Built as part of an AI/ML Engineering Internship Assessment
