@@ -56,8 +56,8 @@ INTERNSHIP_ASSIGNMENT/
 ## 1️⃣ Clone the Repository
 
 ```
-git clone https://github.com/your-username/mini-ai-call-agent.git
-cd mini-ai-call-agent
+git clone https://github.com/AnshRajSingh70076/Internship_Assignment.git
+cd Internship_Assignment
 ```
 
 ---
