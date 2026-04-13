@@ -12,7 +12,7 @@ os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
 def main():
 
-    docs = load_data("C:/Users/rajs1/Downloads/Call_Dataset.xlsx")
+    docs = load_data("Call_Dataset.xlsx")
 
     
     for d in docs:
