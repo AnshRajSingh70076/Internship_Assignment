@@ -92,7 +92,7 @@ pip install -r requirements.txt
 OR manually:
 
 ```
-pip install langchain langgraph langchain-community langchain-groq
+pip install langchain langgraph langchain-community langchain-groq langchain-pinecone
 pip install pinecone sentence-transformers pandas openpyxl python-dotenv
 ```
 
