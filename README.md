@@ -241,6 +241,10 @@ load_data("Call_Dataset.xlsx")
 - Add evaluation metrics (retrieval accuracy + response grounding score)
 
 ---
+📸 Sample Output Of Terminal
+
+Here is an example output of the AI Call Insight Agent:
+Check Sample_Output File
 
 # ✨ Author
 
